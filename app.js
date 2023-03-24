@@ -1,4 +1,4 @@
-"use strict";
+
 require("dotenv").config();
 const express=require("express");
 const mongoose=require("mongoose");
@@ -43,6 +43,11 @@ app.post("/upload", upload.single("file"),async(req,res)=>{
 
 let result_2={};
 
+
+app.get("/file/:id",(req,res)=>{
+    res.render("password",{error:false});
+});
+
 async function handleDownload(req,res){
 
     const foundFile=await File.findById(req.params.id);
@@ -58,15 +63,14 @@ async function handleDownload(req,res){
             return;
         }
     }
+        
 
-    foundFile.downloadCount++;
-    await foundFile.save();
-    console.log(foundFile.downloadCount);
-    res.download(foundFile.path,foundFile.originalName);
+            foundFile.downloadCount++;
+            await foundFile.save();
+            console.log(foundFile.downloadCount);
+            res.download(foundFile.path,foundFile.originalName);
+        
 }
-
-app.get("/file/:id",handleDownload);
-
 
 app.post("/file/:id",handleDownload);
 
